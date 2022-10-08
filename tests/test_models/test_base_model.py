@@ -13,6 +13,21 @@ class TestBaseModel(unittest.TestCase):
     """
     bm = BaseModel()
 
+    def test_BaseModel(self):
+        """
+        Test the attribute values of BaseModel
+        """
+        self.bm.name = 'School'
+        self.bm.number = 89
+        self.assertEqual(self.bm.created_at, self.bm.updated_at)
+        self.bm.save()
+        bm_json = self.bm.to_dict()
+
+        self.assertEqual(self.bm.name, bm_json['name'])
+        self.assertEqual(self.bm.number, bm_json['number'])
+        self.assertEqual('BaseModel', bm_json['__class__'])
+        self.assertEqual(self.bm.id, bm_json['id'])
+
     def test_init(self):
         """
         test the class init method
@@ -34,20 +49,18 @@ class TestBaseModel(unittest.TestCase):
         testing save method
         """
 
-        self.assertEqual(self.bm.created_at, self.bm.updated_at)
         self.bm.save()
         self.assertNotEqual(self.bm.created_at, self.bm.updated_at)
         self.assertIsInstance(self.bm.updated_at, datetime)
+        self.assertIsInstance(self.bm.created_at, datetime)
 
     def test_to_dict(self):
         """
         testing to_dict method
         """
-
-        self.bm.to_dict()
-        self.assertIsInstance(self.bm.id, str)
-        self.assertIsInstance(self.bm.created_at, str)
-        self.assertIsInstance(self.bm.updated_at, str)
+        bm_json = self.bm.to_dict()
+        self.assertIsInstance(bm_json['created_at'], str)
+        self.assertIsInstance(bm_json['updated_at'], str)
 
 
 if __name__ == "__main__":
